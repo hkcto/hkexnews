@@ -4,6 +4,13 @@ import os
 from lxml import etree
 
 
+# 讀取 log 
+if os.path.isfile('savelog.txt'):
+  log = []
+  with open('savelog.txt', 'r') as f:
+    for line in f:
+      log.append(line.strip())
+
 
 url = 'https://www1.hkexnews.hk/search/titlesearch.xhtml?lang=en'
 headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"}
@@ -58,33 +65,41 @@ for u in doc_link:
   if filetype == '.pdf':
     link = hkexnews_link + u
     pdf_uri.append(link)
-    print("pdf_uri 添加了: ", link)
+    #print("pdf_uri 添加了: ", link)
   elif filetype == '.htm':
     link = hkexnews_link + u
     htm_uri.append(link)
-    print("htm_uri 添加了:", link)
+    #print("htm_uri 添加了:", link)
     pdf_uri.extend(hkexnew.gethtmpdf(link))
+    # 在這裡直接下載 htm 文件,有別於pdf集中下戴
+    if link not in log:
+      hkexnew.download(link)
+      with open('savelog.txt', 'a') as f:
+        f.write('\n' + link)
+    else:
+      print('己存在:  ', link)
   else:
     pass
   i = i+1
 
-print('以下是全部pdf_uri')
-print(pdf_uri)
-
-
 
 #   將 a href 和 hkexnews link 合併,得到完整的 pdf URI,有了完整的URL才能下載其PDF檔
-i = 0
-for s in doc_link:
-  doc_link[i] = hkexnews_link + s
-  i = i+1
-
-
-#   執行下載文件
 # i = 0
-# for u in doc_link:
-#     hkexnew.download(u, doc_link_new[i])
-#     i = i+1
+# for s in doc_link:
+#   doc_link[i] = hkexnews_link + s
+#   i = i+1
+
+
+  # 執行下載文件
+i = 0
+for u in pdf_uri:
+  if u not in log:
+    hkexnew.download(pdf_uri[i])
+    with open('savelog.txt', 'a') as f:
+      f.write('\n' + u)
+    i = i+1
+  else:
+    print('己存在:  ', u)
 
 
 # # 用於生成 html code
