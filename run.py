@@ -63,11 +63,13 @@ for u in doc_link:
     link = hkexnews_link + u
     htm_uri.append(link)
     print("htm_uri 添加了:", link)
+    pdf_uri.extend(hkexnew.gethtmpdf(link))
   else:
     pass
   i = i+1
 
-# 得到 htm_uri後,再這裡再次分析爬出 pdf
+print('以下是全部pdf_uri')
+print(pdf_uri)
 
 
 

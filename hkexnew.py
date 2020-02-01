@@ -46,3 +46,21 @@ def changecontent(old_file, new_file, old_str, new_str):
             f.write(line.replace(old_str,new_str))
 
     content.close
+
+
+# get htm pdf link, retun list type
+def gethtmpdf(url):
+
+    html = requests.get(url).text
+    html = etree.HTML(html)
+
+    #   os.path.split() 可以分開檔案的路徑和名稱
+    p, n= os.path.split(url)
+    pdf_link = html.xpath('//font[@type="uploadFile"]/a/@href')
+    i = 0
+    pdf_url = []
+    for link in pdf_link:
+        pdf_url.append(p + '/' + link)
+        i= i+1
+
+    return(pdf_url)
