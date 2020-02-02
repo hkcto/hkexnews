@@ -111,11 +111,15 @@ for s in table_time_new:
     tablecode = tablecode + str.format(date=s, document=headline[i], doc_link=doc_link_new[i], doc_link_content=doc_content_new[i])
     i = i+1
 
-tablecode = '<table>' + tablecode + '</table>'
 
+
+tablecode = '<table>' + tablecode + '</table>'
+headercode = """<section style="background-image:url('/wp-content/uploads/2020/01/nv-1.jpg');">
+<h2>Announcements and Circulars</h2></section>\n"""
+tablecode = headercode + tablecode
 # #hkexnew.changecontent('announcements.html','a2.html','Content',tablecode )
 
-# 修改 wp page. id: 1559 是中文版的.
-wpxmlrpc.eidtpage(1559, 'rpc_hk', tablecode)
+# 修改 wp page. id: 1559 是中文版的 1554 是英文版.
+wpxmlrpc.eidtpage(1554, 'rpc_eng', tablecode)
 
     
