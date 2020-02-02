@@ -1,4 +1,4 @@
-import hkexnew
+import hkexnew, wpxmlrpc
 import requests
 import os
 from lxml import etree
@@ -102,16 +102,20 @@ for u in pdf_uri:
     print('己存在:  ', u)
 
 
-# # 用於生成 html code
-# str = """<tr><td>{date}</td><td><div class="headline">{document}</div><div class="doc-link"><a href={doc_link}>{doc_link_content}</a></div></td></tr>\n"""
-# tablecode = ""
-# i = 0
-# for s in table_time_new:
-#     # print(str.format(date=s))
-#     tablecode = tablecode + str.format(date=s, document=headline[i], doc_link=doc_link_new[i], doc_link_content=doc_content_new[i])
-#     i = i+1
-# # print(tablecode)
+# 用於生成 html code
+str = """<tr><td>{date}</td><td><div class="headline">{document}</div><div class="doc-link"><a href={doc_link}>{doc_link_content}</a></div></td></tr>\n"""
+tablecode = ""
+i = 0
+for s in table_time_new:
+    # print(str.format(date=s))
+    tablecode = tablecode + str.format(date=s, document=headline[i], doc_link=doc_link_new[i], doc_link_content=doc_content_new[i])
+    i = i+1
+
+tablecode = '<table>' + tablecode + '</table>'
 
 # #hkexnew.changecontent('announcements.html','a2.html','Content',tablecode )
+
+# 修改 wp page. id: 1559 是中文版的.
+wpxmlrpc.eidtpage(1559, 'rpc_hk', tablecode)
 
     
