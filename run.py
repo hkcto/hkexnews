@@ -1,34 +1,44 @@
-import hkexnew, wpxmlrpc
+import hkexnew, wpxmlrpc, pyftp
 import requests
 import os
 from lxml import etree
 
 
 # 讀取 log 
+log = []
 if os.path.isfile('savelog.txt'):
-  log = []
   with open('savelog.txt', 'r') as f:
     for line in f:
       log.append(line.strip())
 
 
-url = 'https://www1.hkexnews.hk/search/titlesearch.xhtml?lang=en'
+# url = 'https://www1.hkexnews.hk/search/titlesearch.xhtml?lang=en'
+url = 'https://www1.hkexnews.hk/search/titlesearch.xhtml?lang=zh'
 headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"}
+# payload = {
+#     'lang':'en',
+#     'category': '0',
+#     'market': 'SEHK',
+#     'searchType': '-1',
+#     'stockId': '1000016998',
+#     'from': '19990401',
+#     'to': '20201230'
+
+# }
 payload = {
-    'lang':'en',
+    'lang':'zh',
     'category': '0',
     'market': 'SEHK',
-    'searchType': '-1',
+    'searchType': '0',
     'stockId': '1000016998',
     'from': '19990401',
     'to': '20201230'
 
 }
 
-
 # post 請求
 r = requests.post(url, payload, headers=headers)
-html = r.content
+html = r.text
 html = etree.HTML(html) # 生成一個 xpath 解釋對像
 
 #   table headline
@@ -114,12 +124,12 @@ for s in table_time_new:
 
 
 tablecode = '<table>' + tablecode + '</table>'
-headercode = """<section style="background-image:url('/wp-content/uploads/2020/01/nv-1.jpg');">
+headercode = """<section style="background-image:url('/wp-content/uploads/2020/01/nv-1.jpg');color:#549B01;background-size: cover;">
 <h2>Announcements and Circulars</h2></section>\n"""
 tablecode = headercode + tablecode
 # #hkexnew.changecontent('announcements.html','a2.html','Content',tablecode )
 
 # 修改 wp page. id: 1559 是中文版的 1554 是英文版.
-wpxmlrpc.eidtpage(1554, 'rpc_eng', tablecode)
+# wpxmlrpc.eidtpage(1554, 'rpc_eng', tablecode)
+wpxmlrpc.eidtpage(1559, 'rpc_hk', tablecode)
 
-    
