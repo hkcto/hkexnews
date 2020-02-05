@@ -11,21 +11,22 @@ if os.path.isfile('savelog.txt'):
     for line in f:
       log.append(line.strip())
 
-
-# url = 'https://www1.hkexnews.hk/search/titlesearch.xhtml?lang=en'
-url = 'https://www1.hkexnews.hk/search/titlesearch.xhtml?lang=zh'
+url = ['https://www1.hkexnews.hk/search/titlesearch.xhtml?lang=en',
+      'https://www1.hkexnews.hk/search/titlesearch.xhtml?lang=zh']
+# url= 'https://www1.hkexnews.hk/search/titlesearch.xhtml?lang=en'
+# url_hk= 'https://www1.hkexnews.hk/search/titlesearch.xhtml?lang=zh'
 headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"}
-# payload = {
-#     'lang':'en',
-#     'category': '0',
-#     'market': 'SEHK',
-#     'searchType': '-1',
-#     'stockId': '1000016998',
-#     'from': '19990401',
-#     'to': '20201230'
-
-# }
 payload = {
+    'lang':'en',
+    'category': '0',
+    'market': 'SEHK',
+    'searchType': '-1',
+    'stockId': '1000016998',
+    'from': '19990401',
+    'to': '20201230'
+
+}
+payload_hk = {
     'lang':'zh',
     'category': '0',
     'market': 'SEHK',
@@ -37,7 +38,7 @@ payload = {
 }
 
 # post 請求
-r = requests.post(url, payload, headers=headers)
+r = requests.post(url[1], payload_hk, headers=headers)
 html = r.text
 html = etree.HTML(html) # 生成一個 xpath 解釋對像
 
@@ -113,7 +114,7 @@ for u in pdf_uri:
 
 
 # 用於生成 html code
-str = """<tr><td>{date}</td><td><div class="headline">{document}</div><div class="doc-link"><a href={doc_link}>{doc_link_content}</a></div></td></tr>\n"""
+str = """<tr><td class="td-date">{date}</td><td><div class="headline">{document}</div><div class="doc-link"><a href={doc_link} style="text-decoration:none;">{doc_link_content}</a></div></td></tr>\n"""
 tablecode = ""
 i = 0
 for s in table_time_new:
@@ -123,13 +124,15 @@ for s in table_time_new:
 
 
 
-tablecode = '<table>' + tablecode + '</table>'
-headercode = """<section style="background-image:url('/wp-content/uploads/2020/01/nv-1.jpg');color:#549B01;background-size: cover;">
-<h2>Announcements and Circulars</h2></section>\n"""
+tablecode = '<div style="width:15%;display:inline-block;"></div><div id="table-div" style="display:inline-block"><table><thead><th style="border:0;">Date</th><th style="border:0;">Document</th></thead>' + tablecode + '</table></div>'
+headercode = """<section id="banner"></div><div style="width:10%;display:inline-block"></div><h2 style="display:inline-block">Announcements and Circulars</h2></section>\n"""
 tablecode = headercode + tablecode
 # #hkexnew.changecontent('announcements.html','a2.html','Content',tablecode )
 
 # 修改 wp page. id: 1559 是中文版的 1554 是英文版.
-# wpxmlrpc.eidtpage(1554, 'rpc_eng', tablecode)
-wpxmlrpc.eidtpage(1559, 'rpc_hk', tablecode)
+# id: 763 Announcements and Circulars
+# id: 36 公告及通函
+wpxmlrpc.eidtpage(36, '公告及通函', tablecode)
+# wpxmlrpc.eidtpage(763, 'Announcements and Circulars', tablecode)
+#pyftp.ftpupload()
 
