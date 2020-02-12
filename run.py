@@ -8,7 +8,8 @@ url = ['https://www1.hkexnews.hk/search/titlesearch.xhtml?lang=en',
 # url= 'https://www1.hkexnews.hk/search/titlesearch.xhtml?lang=en'
 # url_hk= 'https://www1.hkexnews.hk/search/titlesearch.xhtml?lang=zh'
 headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"}
-payload_eng = {
+
+payload = {
     'lang':'en',
     'category': '0',
     'market': 'SEHK',
@@ -59,5 +60,5 @@ pyftp.ftpupload()
 # id: 36 公告及通函
 # wpxmlrpc.eidtpage(36, '公告及通函', tablecode)
 # wpxmlrpc.eidtpage(763, 'Announcements and Circulars', tablecode)
-#pyftp.ftpupload()
+# pyftp.ftpupload()
 
