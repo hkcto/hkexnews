@@ -10,11 +10,12 @@ if os.path.isfile('savelog.txt'):
     for line in f:
       log.append(line.strip())
 
-header = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"}
 
 
-def spider(url, payload, headers=header):
+
+def spider(url, payload, title):
     # post 請求
+    header = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"}
     r = requests.post(url, payload, headers=header)
     html = r.text
     html = etree.HTML(html) # 生成一個 xpath 解釋對像
@@ -100,7 +101,7 @@ def spider(url, payload, headers=header):
 
 
     tablecode = '<div style="width:15%;display:inline-block;"></div><div id="table-div" style="display:inline-block"><table><thead><th style="border:0;">Date</th><th style="border:0;">Document</th></thead>' + tablecode + '</table></div>'
-    headercode = """<section id="banner"></div><div style="width:10%;display:inline-block"></div><h2 style="display:inline-block">Announcements and Circulars</h2></section>\n"""
+    headercode = """<section id="banner"></div><div style="width:10%;display:inline-block"></div><h2 style="display:inline-block">{title}</h2></section>\n""".format(title=title)
     tablecode = headercode + tablecode
 
     return tablecode

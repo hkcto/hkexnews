@@ -33,15 +33,15 @@ payload_hk = {
 ####################### 這裡是正式運行區 #################################
 
 # 這裡是英文版
-tablecode = hkexnew.spider(url[0], payload_eng)
+tablecode = hkexnew.spider(url[0], payload, 'Announcements and Circulars')
 wpxmlrpc.eidtpage(763, 'Announcements and Circulars', tablecode)
 
 # 這裡是中文版
-tablecode = hkexnew.spider(url[1], payload_hk)
+tablecode = hkexnew.spider(url[1], payload_hk, '公告及通函')
 wpxmlrpc.eidtpage(36, '公告及通函', tablecode)
 
 # 這裡是上載區
-pyftp.ftpupload()
+# pyftp.ftpupload()
 
 
 ########################## 這裡是測試區 ##################################
